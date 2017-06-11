@@ -148,17 +148,16 @@ Custom property | Description | Default
       }
 
       _remove(event) {
-        if (this.parentNode.id == 'slot2') {
-          this.dispatchEvent(new CustomEvent('chip-removed', {
-            detail: {
-              'chipLabel': this.label
-            }
-          }));
-        } else {
-          this.parentNode.removeChild(this);
-        }
-      }
+        if (this.parentNode.id !== 'slot2') {
+            this.parentNode.removeChild(this);
+        } 
 
+        this.dispatchEvent(new CustomEvent('chip-removed', {
+            detail: {
+            'chipLabel': this.label
+            }
+        }));
+      }
     }
     window.customElements.define(PaperChip.is, PaperChip);
   </script>
