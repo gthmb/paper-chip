@@ -120,7 +120,7 @@ Custom property | Description | Default
     <div class="chip unselectable">
       <span class="label">[[label]]</span>
       <slot name="avatar"></slot>
-      <div hidden$="[[!closable]]" class="closeIcon" on-click="_remove">
+      <div hidden$="[[!closable]]" class="closeIcon" on-click="_remove" on-tap="onCloseTapped">
         <iron-icon class="close" icon="icons:clear"></iron-icon>
       </div>
     </div>
@@ -143,20 +143,28 @@ Custom property | Description | Default
           closable: {
             type: Boolean,
             value: false
+          },
+          dontAutoRemove: {
+              type: Boolean,
+              value: false
           }
         };
       }
 
-      _remove(event) {
-        if (this.parentNode.id !== 'slot2') {
-            this.parentNode.removeChild(this);
-        } 
+      onCloseTapped() {
+        this.dispatchEvent(new CustomEvent('close-tapped'));
+      }
 
+      _remove(event) {
         this.dispatchEvent(new CustomEvent('chip-removed', {
             detail: {
-            'chipLabel': this.label
+              'chipLabel': this.label
             }
         }));
+
+        if (this.parentNode.id !== 'slot2' && !this.dontAutoRemove ) {
+            this.parentNode.removeChild(this);
+        }
       }
     }
     window.customElements.define(PaperChip.is, PaperChip);
